@@ -39,7 +39,7 @@ Cliente criarCliente() {
   getchar();
 
   printf("\nDigite a idade do cliente: ");
-  scanf(" %d", cliente.idade);
+  scanf("%d", &cliente.idade);
   getchar();
 
   return cliente;
@@ -132,6 +132,14 @@ void buscar(No *raiz, char *nome) {
   buscar(raiz->dir, nome);
 }
 
+void liberarArvore(No *raiz) {
+  if(raiz != NULL) {
+    liberarArvore(raiz->esq);
+    liberarArvore(raiz->dir);
+    free(raiz);
+  }
+}
+
 int main() {
   setlocale(LC_ALL, "Portuguese");
 
@@ -139,39 +147,66 @@ int main() {
   int opcao;
   char nome[50];
   Cliente cliente;
-  Cliente novoCliente;
 
   while(1) {
     printf("\nMenu\n");
-
     printf("1. Adicionar Contato\n");
+    printf("2. Remover Contato\n");
+    printf("3. Atualizar Contato\n");
+    printf("4. Listar Contatos\n");
+    printf("5. Buscar Contato\n");
+    printf("0. Sair\n");
     
-    printf("\n\nEscolha uma opção: ");
-    scanf(" %d", &opcao);
+    printf("\nEscolha uma opção: ");
+    scanf("%d", &opcao);
     getchar();
 
     switch(opcao) {
       case 1:
-        novoCliente = criarCliente(cliente);
-        raiz = adicionar(raiz, novoCliente);
-        printf("Contato adicionado com sucesso!");
-      break;
+        cliente = criarCliente();
+        raiz = adicionar(raiz, cliente);
+        printf("\nContato adicionado com sucesso!\n");
+        break;
 
-      case 2: 
-        
-      break;
+      case 2:
+        printf("\nDigite o nome do contato a ser removido: ");
+        scanf("%49[^\n]", nome);
+        getchar();
+        raiz = remover(raiz, nome);
+        printf("\nContato removido com sucesso!\n");
+        break;
 
       case 3:
-
-      break;
+        printf("\nDigite o nome do contato a ser atualizado: ");
+        scanf("%49[^\n]", nome);
+        getchar();
+        printf("\nDigite os novos dados do contato:\n");
+        cliente = criarCliente();
+        raiz = atualizar(raiz, nome, cliente);
+        printf("\nContato atualizado com sucesso!\n");
+        break;
 
       case 4:
+        printf("\nLista de Contatos:\n");
+        listar(raiz);
+        break;
 
-      break;
+      case 5:
+        printf("\nDigite o nome do contato a ser buscado: ");
+        scanf("%49[^\n]", nome);
+        getchar();
+        printf("\nResultado da busca:\n");
+        buscar(raiz, nome);
+        break;
+
+      case 0:
+        liberarArvore(raiz);
+        printf("\nPrograma encerrado.\n");
+        return 0;
 
       default:
-
-      break;
+        printf("\nOpção inválida!\n");
+        break;
     }
   }
 
