@@ -9,6 +9,7 @@ Uma Árvore Binária de Busca (ABB) é uma estrutura de dados hierárquica onde 
 Nos exemplos implementados, utilizamos ABBs para:
 1. Sistema de recomendação de filmes (ordenados por pontuação)
 2. Sistema de gerenciamento de estoque (ordenados por ID do produto)
+3. Agenda de contatos (ordenados por nome)
 
 ## Estruturas de Dados
 
@@ -44,6 +45,21 @@ typedef struct No {
 } No;
 ```
 
+### Exemplo 3: Agenda de Contatos
+
+```c
+typedef struct {
+  char nome[50];
+  char telefone[20];
+  char email[200];
+} Contato;
+
+typedef struct No {
+  Contato contato;
+  struct No *esq, *dir;
+} No;
+```
+
 ## Operações Básicas Implementadas
 
 ### 1. Criação de Nó
@@ -51,13 +67,17 @@ typedef struct No {
 ```c
 No *criarNo(Tipo dado) {
   No *novo = (No*)malloc(sizeof(No));
+  if(novo == NULL) {
+    printf("Erro ao alocar memória!\n");
+    exit(1);
+  }
   novo->dado = dado;
   novo->esq = novo->dir = NULL;
   return novo;
 }
 ```
 
-Esta função aloca memória para um novo nó, inicializa seus dados e retorna um ponteiro para o nó criado.
+Esta função aloca memória para um novo nó, verifica se a alocação foi bem-sucedida e inicializa seus dados.
 
 ### 2. Inserção
 
@@ -210,6 +230,17 @@ Visita os nós na ordem: esquerda → direita → raiz.
   - Listar produtos com estoque abaixo de um limite
   - Buscar produto por ID
 
+### 3. Agenda de Contatos
+
+- **Ordenação**: Contatos são ordenados por nome
+- **Operações**:
+  - Adicionar contato
+  - Remover contato
+  - Atualizar contato
+  - Buscar contato por nome
+  - Listar todos os contatos
+  - Autocompletar nome do contato
+
 ## Complexidade das Operações
 
 Para uma ABB não balanceada:
@@ -232,12 +263,16 @@ O pior caso ocorre quando a árvore está desbalanceada (similar a uma lista enc
 
 4. **Modularidade**: Funções específicas para cada operação, tornando o código mais legível e manutenível.
 
+5. **Bibliotecas necessárias**: Inclusão de `stdlib.h` para funções de alocação de memória (`malloc`, `free`).
+
 ## Limitações da Implementação Atual
 
 1. **Balanceamento**: As implementações não incluem mecanismos de balanceamento como AVL ou Rubro-Negra, o que pode levar a baixo desempenho em certos padrões de inserção.
 
 2. **Persistência de dados**: Os dados são armazenados apenas em memória e são perdidos quando o programa termina.
 
+3. **Validação de entrada**: Não há validação robusta dos dados de entrada (como formato de e-mail, telefone, etc.).
+
 ## Conclusão
 
-As Árvores Binárias de Busca são estruturas de dados versáteis e eficientes para operações de busca, inserção e remoção quando mantidas relativamente balanceadas. As implementações demonstradas mostram a flexibilidade das ABBs em diferentes contextos: recomendação de filmes e gerenciamento de estoque. 
+As Árvores Binárias de Busca são estruturas de dados versáteis e eficientes para operações de busca, inserção e remoção quando mantidas relativamente balanceadas. As implementações demonstradas mostram a flexibilidade das ABBs em diferentes contextos: recomendação de filmes, gerenciamento de estoque e agenda de contatos. Cada implementação adapta a estrutura básica da ABB para atender às necessidades específicas do domínio de aplicação. 
